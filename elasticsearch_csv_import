@@ -1,0 +1,10 @@
+from elasticsearch import helpers, Elasticsearch
+import csv
+
+es = Elasticsearch([{'host': '40.118.5.72', 'port': 9200}])
+
+csv.register_dialect('piper', delimiter='|')
+
+with open('./recotag2.csv', encoding="utf8") as f:
+    reader = csv.DictReader(f, dialect='piper')
+    helpers.bulk(es, reader, index='my-listed-index', doc_type='corpus')
